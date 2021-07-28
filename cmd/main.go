@@ -7,7 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/GrooveCommunity/zabbix-proxy-paygo/entity"
+	"github.com/GrooveCommunity/glib-noc-event-structs/entity"
+	"github.com/GrooveCommunity/zabbix-proxy-paygo/internal"
 	"github.com/gorilla/mux"
 )
 
@@ -20,13 +21,12 @@ func main() {
 	router.HandleFunc("/healthy", handleValidateHealthy).Methods("GET")
 	router.HandleFunc("/webhook", handleWebhook).Methods("POST")
 
-	/*projectID = os.Getenv("PROJECT_ID")
-	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
-	topicMetrics = os.Getenv("TOPIC_ID_METRICS")
+	projectID = os.Getenv("PROJECT_ID")
+	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER_ZABBIX")
 
 	if projectID == "" || topicDispatcher == "" || topicMetrics == "" {
 		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
-	}*/
+	}
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("APP_PORT"), router))
 }
@@ -36,8 +36,14 @@ func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
+	var zabbixRequest entity.ZabbixRequest
 
 	body, _ := ioutil.ReadAll(r.Body)
 
+	json.Unmarshal(body, &zabbixRequest)
+
 	log.Println(string(body))
+	log.Println("=========================================\n\n\n")
+
+	internal.ForwardIssue(zabbixRequest, body, projectID, topicDispatcher)
 }
