@@ -10,7 +10,7 @@ import (
 	"github.com/GrooveCommunity/glib-noc-event-structs/entity"
 )
 
-func ForwardIssue(zabbixRequest entity.ZabbixRequest, body []byte, projectID, topicDispatcher string) {
+func ForwardIssue(zabbixRequest entity.ZabbixRequest, body []byte, projectID, topicMetrics string) {
 
 	zabbixRequest.Fields.RequestDate = time.Now().Format(time.RFC3339)
 

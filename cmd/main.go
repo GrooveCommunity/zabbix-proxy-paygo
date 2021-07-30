@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	projectID, topicDispatcher, topicMetrics string
+	projectID, topicMetrics string
 )
 
 func main() {
@@ -22,9 +22,9 @@ func main() {
 	router.HandleFunc("/webhook", handleWebhook).Methods("POST")
 
 	projectID = os.Getenv("PROJECT_ID")
-	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER_ZABBIX")
+	topicMetrics = os.Getenv("TOPIC_ID_METRICS_ZABBIX")
 
-	if projectID == "" || topicDispatcher == "" || topicMetrics == "" {
+	if projectID == "" || topicMetrics == "" {
 		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
 	}
 
@@ -45,5 +45,5 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 	log.Println(string(body))
 	log.Println("=========================================\n\n\n")
 
-	internal.ForwardIssue(zabbixRequest, body, projectID, topicDispatcher)
+	internal.ForwardIssue(zabbixRequest, body, projectID, topicMetrics)
 }
