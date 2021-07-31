@@ -24,7 +24,7 @@ func ForwardIssue(zabbixRequest entity.ZabbixRequest, body []byte, projectID, to
 		})
 	}
 
-	log.Println(payload)
+	log.Println(string(payload))
 
 	//go gcp.PublicMessage(projectID, topicDispatcher, payload)
 }
