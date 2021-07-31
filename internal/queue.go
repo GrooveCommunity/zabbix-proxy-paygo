@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"time"
 
-	//	"github.com/GrooveCommunity/glib-cloud-storage/gcp"
+	"github.com/GrooveCommunity/glib-cloud-storage/gcp"
 	"github.com/GrooveCommunity/glib-noc-event-structs/entity"
 )
 
@@ -26,9 +26,5 @@ func ForwardIssue(zabbixRequest entity.ZabbixRequest, body []byte, projectID, to
 
 	log.Println(string(payload))
 
-	//go gcp.PublicMessage(projectID, topicDispatcher, payload)
+	go gcp.PublicMessage(projectID, topicMetrics, payload)
 }
-
-/*func ValidateEvent(zabbixRequest entity.ZabbixRequest) {
-	log.Println(zabbixRequest)
-}*/
